@@ -3,6 +3,7 @@ import random
 import sys
 
 def list_snapshots(client, tag_value):
+    print(tag_value)
     response = client.describe_snapshots(
         Filters=[
             {
@@ -13,6 +14,7 @@ def list_snapshots(client, tag_value):
             },
         ]
     )
+    print(response)
     snapshots = response['Snapshots']
     
     snap_id = []
