@@ -68,7 +68,7 @@ def main():
         try: 
             client = boto3.client('ec2', region_name=region_name)
             snap_info = list_snapshots(client, tag_key)
-            create_volume(client, snap_info)
+            create_volume(client, snap_info, azs)
         except Exception as e:
             print(e)
             print(f"Error creating volume {tag_key}")
