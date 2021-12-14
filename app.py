@@ -1,5 +1,6 @@
 import boto3
 import random
+import sys
 
 def list_snapshots(client, tag_value):
     response = client.describe_snapshots(
@@ -56,13 +57,21 @@ def create_volume(client, snap_info, azs):
 
 def main():
     # Change snapshot tag
-    snapshot_tag = "xxxxxxx"
     azs = ['sa-east-1a', 'sa-east-1b', 'sa-east-1c']
     region_name = "sa-east-1"
     
-    client = boto3.client('ec2', region_name=region_name)
-    snap_info = list_snapshots(client, snapshot_tag)
-    create_volume(client, snap_info)
+    file_pvcs = open(sys.argv[1], "r")
+    
+    for f in file_pvcs:
+        tag_key = (f.strip())
+        print(tag_key)
+        try: 
+            client = boto3.client('ec2', region_name=region_name)
+            snap_info = list_snapshots(client, tag_key)
+            create_volume(client, snap_info)
+        except Exception as e:
+            print(e)
+            print(f"Error creating volume {tag_key}")
     
 if __name__ == '__main__':
     main()
